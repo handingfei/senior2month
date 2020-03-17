@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handingfei.senior2.exam.dao.BuyMapper">
+	
+	<resultMap type="com.handingfei.senior2.exam.domain.Buy" id="buybase">
+		<id column="id" property="id"/>
+		<result column="type" property="type"/>
+		<result column="type_id" property="type_id"/>
+		<result column="uptime" property="uptime"/>
+		<result column="jiage1" property="uptime"/>
+		<result column="jiage2" property="jiage2"/>
+		<result column="picture" property="picture"/>
+		
+		<association property="type2" javaType="com.handingfei.senior2.exam.domain.Type">
+			<id column="typeid" property="typeid"/>
+			<result column="typename" property="typename"/>
+		</association>
+	</resultMap>
+	
+	<select id="buycar" resultMap="buybase">
+		select a.*,b.typename from car_buy a left join car_type b 
+		on a.type_id=b.typeid
+		<where>
+			<if test="jiage1!=null && jiage1!=0">
+				and jiage1>=#{j1}
+			</if>
+			<if test="jiage2!=null && jiage2!=0">
+				and jiage2 &lt; =#{j2}
+			</if>
+			<if test="uptime!=null && uptime!=''">
+				and uptime like "%"#{uptime}"%"
+			</if>
+			<if test="type!=null && type!=''">
+				and type like "%"#{type}"%"
+			</if>
+		</where>
+	</select>
+	
+	<insert id="add">
+		insert into car_buy(name,type,typeid,uptime,picture) values(
+		#{name},#{type},#{typeid},#{uptime},#{picture})	
+	</insert>
+	
+	<update id="update">
+		update set car_buy(name,type,typeid,uptime,picture) where 
+		id=#{id}
+	</update>
+	
+	<select id="chaxun" resultMap="buybase">
+		select a.*,b.typename from car_buy a left join car_type b 
+		on a.type_id=b.typeid
+	</select>
+	
+	
+</mapper>
